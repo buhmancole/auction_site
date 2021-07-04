@@ -1,0 +1,12 @@
+title Make Bid Flow
+
+Bidder->Web Interface: Requests to view auction item
+Web Interface->Bidder: Responds with view of item
+
+Bidder->Web Interface: Requests to make a bid of amount $x
+Web Interface->Web Interface: Validates the bid amount
+
+Web Interface->Database: Inserts a bid
+Database->Web Interface: Responds with updated bid amount for item
+
+Web Interface->Bidder: Confirms bid was successful and returns current bid price

@@ -1,0 +1,87 @@
+{% extends "auction/base.html" %}
+{% load static %}
+
+{% block subheader %}
+	<div id="bidModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Bid</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<form action="bid" method="post">
+						{% csrf_token %}
+						<p class="card-text mb-0">Current Price: ${{item.getPrice}}</p>
+						<p class="card-text">Increment: ${{item.getMinIncrement}}</p>
+						<div class="form-group">
+							<label for="amount">Amount ($)</label>
+							<input type="number" class="form-control" name="amount" 
+								min="{{item.getPrice|add:item.getMinIncrement}}" value="{{item.getPrice|add:item.getMinIncrement}}" required>
+							{% if request.GET.error == 'failure' %}
+							<div class="alert alert-danger">
+								<strong>Error! </strong> It's possible you've been outbid, or an invalid bid amount was entered. Please try again, making sure it's at least ${{item.getPrice|add:item.getMinIncrement}}.
+							</div>
+							{% endif %}
+						</div>
+						<button type="submit" class="btn btn-lg btn-primary btn-block mt-2">Bid</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block body %}
+	<a href="{% url 'auction:auction' auction.getPass %}" class="btn btn-info mb-3">&#8249; Back to Auction</a>
+	<div class="row">
+		<div class="col-sm card m-1">
+			<div class="row no-gutters">
+				<div class="col-md-4">
+					<div id="carousel" class="carousel" data-interval="false">
+						<div class="carousel-inner">
+							{% for image in item.getImages %}
+							<div class="carousel-item{% if forloop.first %} active{% endif %} mt-2">
+								<img class="d-block" src="{{image.getImage.url}}" alt="thumbnail" height="400px" style="object-fit: contain;">
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+					<div class="d-flex justify-content-between mb-3 mt-2">
+						<a class="btn btn-secondary w-50 mx-1" href="#carousel" data-slide="prev">&#60;</a>
+						<a class="btn btn-secondary w-50 mx-1" href="#carousel" data-slide="next">&#62;</a>
+					</div>
+				</div>
+				<div class="col-md">
+					<div class="card-body">
+						<h5 class="card-title">{{item.getName}}</h5>
+						<p class="card-text">{{item.getDesc}}</p>
+						{% if auction.isRunning %}
+						<p class="card-text mb-0">Current Price: ${{item.getPrice}}</p>
+						<p class="card-text">Increment: ${{item.getMinIncrement}}</p>
+						{% else %}
+						<p class='card-text mb-0'><strong>Price: ${{item.getWorth}}</strong></p>
+						{% endif %}
+
+						{% if user.is_authenticated and not item.getIsLive and auction.isRunning %}
+						<button type="button" class="btn btn-lg btn-primary mr-2" data-toggle="modal" data-target="#bidModal">Bid</button>
+						<a class="btn btn-lg btn-secondary" 
+							{% if item in request.user.getFavorites %}
+								href="{% url 'auction:item' auction.getPass item.pk %}favorite?fav=rem">Favorite &#9733;
+							{% else %}
+								href="{% url 'auction:item' auction.getPass item.pk %}favorite?fav=add">Favorite &#9734;
+							{% endif %}</a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block script %}
+			{% if request.GET.error != 'success' and request.GET.error %}
+			$('#bidModal').modal('show');
+			{% endif %}
+			setTimer(new Date("{{auction.getStart.isoformat}}"), new Date("{{auction.getEnd.isoformat}}"));
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "auction/base.html" %}
+
+{% block body %}
+	<form action="process" method="post">
+		{% csrf_token %}
+		<div class="row pt-5">
+			<div class="col-sm-4"></div>
+			<div class="col-sm">
+				{% if request.GET.error == 'invalid' %}
+				<div class="alert alert-danger">
+					<strong>Error! </strong>Unable to login with the provided credentials
+				</div>
+				{% endif %}
+				{% if request.GET.error == 'passwordreset' %}
+				<div class="alert alert-success">
+					<strong>Success! </strong>Your password has been reset successfully! Please log in.
+				</div>
+				{% endif %}
+				<input type="hidden" name="next" value="{{ request.GET.next }}">
+				<input type="email" class="form-control form-control-lg my-1" placeholder="Enter Email" name="username" required>
+				<div class="form-group">
+					<input type="password" class="form-control form-control-lg my-1" placeholder="Enter Password" name="password" required>
+					<small class="form-text ml-2"><a href="{% url 'auction:forgotPassword' %}">Forgot password?</a></small>
+				</div>
+				<button type="submit" class="btn btn-lg btn-primary btn-block mt-2">Login</button>
+				<button class="btn btn-lg btn-secondary btn-block mt-3" 
+					onclick="window.location.href='{% url 'auction:signup' %}?next={{ request.GET.next }}'">Create an Account</button>
+			</div>
+			<div class="col-sm-4"></div>
+		</div>
+	</form>
+{% endblock %}

@@ -1,0 +1,16 @@
+Minimum Requirements
+
+Admin
+Add items to an auction (setup)
+Start auction (time based ok)
+Enter live item winner
+Show all winners, with name, bidding number, items won, total cost
+End a silent action (time based ok)
+Add bidders to an auction (registration process)
+
+User
+Bid on a silent item
+List winning (or won) items with total price
+List items I'm bidding on
+
+300 Concurrent users

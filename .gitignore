@@ -1,0 +1,13 @@
+venv
+.DS_Store
+.vscode
+__pycache__
+*.pyc
+db.sqlite3
+*.csv
+*.zip
+*.bak
+.idea
+migrations/
+img/
+media/

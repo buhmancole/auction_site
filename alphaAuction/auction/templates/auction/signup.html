@@ -1,0 +1,37 @@
+{% extends "auction/base.html" %}
+
+{% block body %}
+	<form action="process" method="post">
+		{% csrf_token %}
+
+		<div class="row pt-5">
+			<div class="col-sm-3"></div>
+			<div class="col-sm">
+				{% if request.GET.error == 'badpass' %}
+				<div class="alert alert-danger">
+					<strong>Error! </strong>Passwords didn't match or password didn't meet requirements. Password must have at least 8 characters and no more than 20
+				</div>
+				{% endif %}
+				{% if request.GET.error == 'duplicate' %}
+				<div class="alert alert-danger">
+					<strong>Error! </strong>An account already exists with this email address. Please <a href="{% url 'auction:login' %}?next={{ request.GET.next }}">login</a>
+				</div>
+				{% endif %}
+				<div class="row form-group my-0">
+					<div class="col pr-1">
+						<input type="text" class="form-control form-control-lg my-1" placeholder="First Name" name="fname" required>
+					</div>
+					<div class="col pl-1">
+						<input type="text" class="form-control form-control-lg my-1" placeholder="Last Name" name="lname" required>
+					</div>
+				</div>
+				<input type="hidden" name="next" value="{{ request.GET.next }}">
+				<input type="email" class="form-control form-control-lg mt-1 mb-2" placeholder="Email" name="email" required>
+				<input type="password" class="form-control form-control-lg my-1" placeholder="Password" name="password" required>
+				<input type="password" class="form-control form-control-lg my-1" placeholder="Confirm Password" name="password2" required>
+				<button type="submit" class="btn btn-lg btn-primary btn-block mt-3">Sign Up</button>
+			</div>
+			<div class="col-sm-3"></div>
+		</div>
+	</form>
+{% endblock %}

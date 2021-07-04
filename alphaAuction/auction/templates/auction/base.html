@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Marketplace</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		
+		{% load static %}
+		<link rel="icon" href="{% static 'auction/favicon.ico' %}">
+
+		<link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/starter-template/">
+
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		<link rel="stylesheet" href="{% static 'auction/css/style.css' %}">
+	</head>
+	
+	<body>
+		<nav class="static-top">
+			<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+				<span class="w-50"><a class="navbar-brand" href="{% url 'auction:index' %}">Auction</a></span>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapseNav">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="navbar-collapse collapse w-100" id="collapseNav">
+					<ul class="navbar-nav w-100 justify-content-center">
+						<li class="nav-item active">
+							<a id="timer" class="nav-link"></a>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav w-100 justify-content-end">
+						{% if request.user.is_authenticated %}
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="dropdown2" data-toggle="dropdown">
+								{{ request.user.first_name }} {{ request.user.last_name }}: ${{request.user.getAmountOwed}}
+								| Bidder#{{ request.user.id }} </a>
+								<div class="dropdown-menu dropdown-menu-right">
+									<a class="dropdown-item" href="{% url 'auction:profile' %}">Profile</a>
+									<a class="dropdown-item" href="{% url 'auction:myAuctions' %}">My Auctions</a>
+									<a class="dropdown-item" href="{% url 'auction:processLogout' %}?next={{ request.path }}">Logout</a>
+								</div>
+							</li>
+						{% else %}
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'auction:login' %}?next={{ request.path }}">Login</a>
+							</li>
+						{% endif %}
+					</ul>
+				</div>
+			</nav>
+			{% block subheader %}{% endblock %}
+		</nav>
+		
+		<main role="main" class="container main my-3">
+			{% block body %}{% endblock %}
+		</main>
+		
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+		<script src="{% static "auction/js/main.js" %}"></script>
+		<script>
+			{% block script %}{% endblock %}
+		</script>
+	<script src="{% static '/auction/js/registerSw.js' %}"></script>
+	</body>
+</html>

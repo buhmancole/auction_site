@@ -1,0 +1,13 @@
+{% extends "auction/base.html" %}
+
+{% block body %}
+<h1>Current Bid Prices </h1>
+{% for item in auction.item %}
+    {% if item.isLive is True %}
+        <p><b>{{item.getName}}</b> has a current bid of {{ item.getPrice }}</p>
+    {% else %}
+        <p><b>{{item.getName}}</b> was won by {{item.getWinner}} for {{ item.getPrice }}</p>
+    {% endif %}
+
+{% endfor %}
+{% endblock %}

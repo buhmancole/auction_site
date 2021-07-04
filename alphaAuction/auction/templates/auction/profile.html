@@ -1,0 +1,29 @@
+{% extends "auction/base.html" %}
+
+{% block body %}
+	<div>
+		<div class="form-group">
+			<label for="fname">First Name</label>
+			<input type="text" class="form-control" id="fname" value="{{bidder.getFirstName}}" readonly>
+		</div>
+		<div class="form-group">
+			<label for="lname">Last Name</label>
+			<input type="text" class="form-control" id="lname" value="{{bidder.getLastName}}" readonly>
+		</div>
+		<div class="form-group">
+			<label for="email">Email</label>
+			<input type="text" class="form-control" id="email" value="{{bidder.getEmail}}" readonly>
+		</div>
+		<button class="btn btn-primary btn-block" onclick="makeEdit()">Edit Information</button>
+		<button class="btn btn-secondary btn-block">Change Password</button>
+	</div>
+{% endblock %}
+
+{% block script %}
+	function makeEdit(reset=false) {
+		$(".form-group input").attr("readonly", reset);
+		$btn = $(".btn-primary");
+		$btn.text(reset ? "Edit Information" : "Save");
+		$btn.attr("onclick", "makeEdit(" + !reset + ")");
+	}
+{% endblock %}

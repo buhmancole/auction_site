@@ -1,0 +1,11 @@
+title Log In Activity
+
+Bidder->Web Interface: Requests login page
+Web Interface->Bidder: Return login page view
+
+Bidder->Web Interface: Provides username and password
+Web Interface->Database: Asks for password hash for the supplied username
+Database->Web Interface: Returns password hash or indicates username doesn't exist
+Web Interface->Web Interface: Verifies that the credentials are correct
+
+Web Interface->Bidder: Redirects the bidder to the auction item list page

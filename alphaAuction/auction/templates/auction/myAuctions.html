@@ -1,0 +1,45 @@
+{% extends "auction/base.html" %}
+
+{% block body %}
+	<h1 class="mt-4 mb-3">Auctions</h1>
+	<ul class="list-group">
+		{% if bidder.getAuctions %}
+			{% for auction in bidder.getAuctions %}
+				<li class="list-group-item">
+					<a href="{% url 'auction:auction' auction.getPass %}"><h4 class="mt-1 mb-3">{{auction.getName}}</h4></a>
+						{% for item in bidder.getItemsBidOn %}{% if item in auction.getItems %}
+								<div class="col-md card m-1">
+									<div class="row no-gutters">
+										<div class="col-md-2">
+											<img src="{{item.getImages.first.getImage.url}}" class="card-img my-3" alt="thumbnail">
+										</div>
+										<div class="col-md">
+											<div class="card-body">
+												<h5 class="card-title d-inline">{{item.getName}}</h5>
+												{% if item in bidder.getItemsWinning %}
+													<span class="badge badge-info align-top ml-3 mt-1 py-1">Winning</span>
+												{% endif %}
+												{% if item.getIsLive %}
+													<span class="badge badge-danger align-top ml-3 mt-1 py-1">Live</span>
+												{% endif %}
+												<p class="card-text mt-2">{{item.getDesc}}</p>
+												<p class="card-text">${{item.getPrice}}</p>
+												<a href="{% url 'auction:item' auction.getPass item.pk %}" 
+													class="btn btn-primary stretched-link mt-auto">View</a>
+											</div>
+										</div>
+									</div>
+								</div>
+						{% endif %}{% endfor %}
+				</li>
+			{% endfor %}
+		{% else %}
+			<div class="col alert alert-info">No results</div>
+		{% endif %}
+	</ul>
+{% endblock %}
+
+{% block script %}
+	$img = $("img");
+	$img.css("height", $img.width());
+{% endblock %}
